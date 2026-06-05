@@ -11,6 +11,8 @@ const HISTORY_FILE = path.join(__dirname, 'history.json');
 app.use(express.json());
 app.use(express.static(__dirname));
 
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
+
 app.get('/api/rates', (req, res) => {
   try {
     const rates = JSON.parse(fs.readFileSync(RATES_FILE, 'utf8'));
@@ -59,6 +61,7 @@ function saveHistory(rates) {
   fs.writeFileSync(HISTORY_FILE, JSON.stringify(history));
 }
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Gorilla Exchange запущен на порту ${PORT}`);
+  console.log(`Listening on 0.0.0.0:${PORT}`);
 });
