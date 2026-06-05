@@ -104,10 +104,10 @@ nav{position:sticky;top:0;z-index:200;background:rgba(14,17,21,0.97);backdrop-fi
 
 /* ── CALC ─────────────────────────────────────── */
 .calc-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,5vw,38px);letter-spacing:3px;color:var(--wh);margin-bottom:4px;line-height:1;display:flex;align-items:center;gap:10px}
-.calc-title .hi{color:var(--g3)}
+.calc-title .hi{color:var(--wh)}
 .calc-sub{font-size:13px;color:var(--t2);margin-bottom:16px}
 .conv-block{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;position:relative;margin-bottom:16px}
-.conv-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g1),var(--g3),var(--g1))}
+.conv-block::before{content:'';position:absolute;top:0;left:0;right:0;height:0;background:none}
 .conv-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;padding:18px;align-items:end}
 .cv-field{background:var(--bg3);border:1px solid var(--bd);border-radius:10px;padding:13px 14px;transition:border-color .2s;min-width:0}
 .cv-field:focus-within{border-color:var(--bd2)}
@@ -270,6 +270,9 @@ nav{position:sticky;top:0;z-index:200;background:rgba(14,17,21,0.97);backdrop-fi
   .cv-swap{padding:4px 0;flex-direction:row}
   .nav-wrap{padding:8px 12px}
   .how-steps{grid-template-columns:1fr}
+  .nl-s{display:none}
+  .nl-t{font-size:15px;letter-spacing:1.5px}
+  .btn-ch{padding:6px 10px;font-size:12px;letter-spacing:1px}
 }
 @media(max-width:420px){
   .rth,.rrow{grid-template-columns:1fr 72px 72px;padding:9px 10px}
@@ -398,7 +401,7 @@ body.light .footer { background: #f3f4f6 }
   <!-- ═══ RATES ═══ -->
   <div class="page-sec active" id="page-calc">
     <div class="calc-title">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--g3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="14" y1="18" x2="16" y2="18"/></svg>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--wh)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="14" y1="18" x2="16" y2="18"/></svg>
       <span class="hi">&#1050;&#1040;&#1051;&#1068;&#1050;&#1059;&#1051;&#1071;&#1058;&#1054;&#1056;</span> &#1054;&#1041;&#1052;&#1045;&#1053;&#1040;
     </div>
     <div class="calc-sub">&#1042;&#1099;&#1073;&#1077;&#1088;&#1080;&#1090;&#1077; &#1074;&#1072;&#1083;&#1102;&#1090;&#1091;, &#1074;&#1074;&#1077;&#1076;&#1080;&#1090;&#1077; &#1089;&#1091;&#1084;&#1084;&#1091; &mdash; &#1082;&#1086;&#1085;&#1074;&#1077;&#1088;&#1090;&#1072;&#1094;&#1080;&#1103; &#1074;&#1086; &#1074;&#1089;&#1077; &#1074;&#1072;&#1083;&#1102;&#1090;&#1099; &#1089;&#1088;&#1072;&#1079;&#1091;</div>
@@ -678,7 +681,7 @@ body.light .footer { background: #f3f4f6 }
 // ═══════════════════════════════════════════════════
 var RATES = {
   USD:   { buy: 25500,  sell: 26500  },  // Доллар США
-  RUB_T: { buy: 332,    sell: 365    },  // Рубль (перевод Сбер/Т-Банк)
+  RUB_T: { buy: 319,    sell: 365    },  // Рубль (перевод Сбер/Т-Банк)
   RUB:   { buy: 295,    sell: 310    },  // Рубль наличные
   USDT:  { buy: 25500,  sell: 26600  },  // USDT Tether
   KZT_T: { buy: 50,     sell: 0      },  // Тенге безнал (продажи нет)
