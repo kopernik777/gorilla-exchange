@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gorilla Exchange — Админ</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1115; --bg2:#121619; --bg3:#171b21;
+  --card:#1e2328; --card2:#252c34;
+  --bd:rgba(255,255,255,0.08); --bd2:rgba(255,255,255,0.16);
+  --g1:#1a4731; --g2:#22c55e; --g3:#4ade80;
+  --glow:rgba(74,222,128,0.15);
+  --red:#f87171; --gold:#fbbf24;
+  --text:#c8d0d8; --t2:#7a8a97; --mut:#4a5968; --wh:#e8edf2;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:30px 16px 60px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 40% at 50% -10%,rgba(74,222,128,0.04) 0%,transparent 60%)}
+
+.logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--g2);margin-bottom:4px}
+.sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mut);letter-spacing:1.5px;margin-bottom:32px}
+
+/* ── LOGIN ── */
+#loginBlock{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:28px 28px 24px;width:100%;max-width:360px}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--wh);margin-bottom:20px;text-align:center}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+.field input{background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:11px 14px;color:var(--wh);font-family:'JetBrains Mono',monospace;font-size:14px;outline:none;transition:border .2s}
+.field input:focus{border-color:rgba(74,222,128,0.4)}
+.btn-primary{width:100%;padding:12px;background:linear-gradient(135deg,#1a4731,#22c55e);color:#000;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;border:none;border-radius:8px;cursor:pointer;transition:all .2s;box-shadow:0 2px 12px rgba(74,222,128,0.22)}
+.btn-primary:hover{box-shadow:0 0 24px rgba(74,222,128,0.40);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.err{color:var(--red);font-size:13px;text-align:center;margin-top:10px;min-height:20px}
+
+/* ── ADMIN PANEL ── */
+#adminBlock{display:none;width:100%;max-width:620px}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.panel-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--g3)}
+.btn-logout{background:none;border:1px solid var(--bd);color:var(--t2);font-size:12px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+.rates-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.rate-row{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:1fr 120px 120px;align-items:center;gap:10px}
+.rate-name{display:flex;flex-direction:column;gap:2px}
+.rate-name .code{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.5px;color:var(--wh);display:flex;align-items:center;gap:7px}
+.rate-name .desc{font-size:11px;color:var(--mut)}
+.rate-field{display:flex;flex-direction:column;gap:4px}
+.rate-field label{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;text-align:right}
+.rate-field input{background:var(--bg3);border:1px solid var(--bd);border-radius:6px;padding:8px 10px;color:var(--wh);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;outline:none;transition:border .2s;text-align:right;width:100%}
+.rate-field input:focus{border-color:rgba(74,222,128,0.4)}
+.rate-field input.buy{color:var(--g3)}
+.rate-field input.sell{color:var(--red)}
+.rate-field input[value="0"]{color:var(--mut)}
+.no-sell{color:var(--mut);font-size:12px;text-align:right;padding:8px 10px}
+
+.save-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.btn-save{padding:13px 32px;background:linear-gradient(135deg,#1a4731,#22c55e);color:#000;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;border:none;border-radius:8px;cursor:pointer;transition:all .2s;box-shadow:0 2px 12px rgba(74,222,128,0.22)}
+.btn-save:hover{box-shadow:0 0 24px rgba(74,222,128,0.40);transform:translateY(-1px)}
+.btn-save:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.save-status{font-size:13px;min-height:20px}
+.save-status.ok{color:var(--g3)}
+.save-status.fail{color:var(--red)}
+
+.updated{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mut);margin-top:10px}
+
+@media(max-width:480px){
+  .rate-row{grid-template-columns:1fr 96px 96px;gap:6px;padding:12px}
+  .rate-field input{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<div class="logo">🦍 GORILLA EXCHANGE</div>
+<div class="sub">ПАНЕЛЬ УПРАВЛЕНИЯ КУРСАМИ</div>
+
+<!-- LOGIN -->
+<div id="loginBlock">
+  <div class="login-title">ВХОД</div>
+  <div class="field">
+    <label>Пароль</label>
+    <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+  </div>
+  <button class="btn-primary" onclick="doLogin()" id="loginBtn">ВОЙТИ</button>
+  <div class="err" id="loginErr"></div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminBlock">
+  <div class="panel-header">
+    <div class="panel-title">КУРСЫ ВАЛЮТ</div>
+    <button class="btn-logout" onclick="doLogout()">Выйти</button>
+  </div>
+
+  <div class="rates-grid" id="ratesGrid"></div>
+
+  <div class="save-bar">
+    <button class="btn-save" onclick="saveRates()" id="saveBtn">СОХРАНИТЬ</button>
+    <span class="save-status" id="saveStatus"></span>
+  </div>
+  <div class="updated" id="updatedAt"></div>
+</div>
+
+<script>
+var CURRENCIES = [
+  { key:'USD',   code:'USD',  flag:'🇺🇸', name:'Доллар США',           noSell:false },
+  { key:'RUB_T', code:'РУБ',  flag:'🇷🇺', name:'Перевод Сбер / Т-Банк', noSell:false },
+  { key:'RUB',   code:'RUB',  flag:'🇷🇺', name:'Наличный рубль',        noSell:false },
+  { key:'USDT',  code:'USDT', flag:'',    name:'Tether USDT',            noSell:false },
+  { key:'KZT_T', code:'BKZT', flag:'🇰🇿', name:'Безнал тенге',          noSell:true  },
+  { key:'KZT',   code:'KZT',  flag:'🇰🇿', name:'Наличный тенге',        noSell:false },
+  { key:'EUR',   code:'EUR',  flag:'🇪🇺', name:'Евро',                  noSell:false },
+  { key:'CNY',   code:'CNY',  flag:'🇨🇳', name:'Китайский юань',        noSell:false },
+  { key:'THB',   code:'THB',  flag:'🇹🇭', name:'Тайский бат',           noSell:false },
+  { key:'JPY',   code:'JPY',  flag:'🇯🇵', name:'Японская иена',         noSell:false },
+  { key:'KRW',   code:'KRW',  flag:'🇰🇷', name:'Южнокорейская вона',    noSell:false },
+];
+
+var savedPassword = '';
+
+function doLogin() {
+  var pw = document.getElementById('pwInput').value;
+  if (!pw) return;
+  var btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = 'ПРОВЕРЯЕМ...';
+
+  // Verify by attempting to load rates with this password stored
+  fetch('/api/rates')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      // Try a POST with password to verify
+      return fetch('/api/rates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw, rates: data })
+      });
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.ok) {
+        savedPassword = pw;
+        localStorage.setItem('ge_pw', pw);
+        document.getElementById('loginErr').textContent = '';
+        showAdmin();
+      } else {
+        document.getElementById('loginErr').textContent = res.error || 'Неверный пароль';
+        btn.disabled = false;
+        btn.textContent = 'ВОЙТИ';
+      }
+    })
+    .catch(function() {
+      document.getElementById('loginErr').textContent = 'Ошибка соединения';
+      btn.disabled = false;
+      btn.textContent = 'ВОЙТИ';
+    });
+}
+
+function doLogout() {
+  savedPassword = '';
+  localStorage.removeItem('ge_pw');
+  document.getElementById('adminBlock').style.display = 'none';
+  document.getElementById('loginBlock').style.display = 'block';
+  document.getElementById('pwInput').value = '';
+}
+
+function showAdmin() {
+  document.getElementById('loginBlock').style.display = 'none';
+  document.getElementById('adminBlock').style.display = 'block';
+  loadRates();
+}
+
+function loadRates() {
+  fetch('/api/rates')
+    .then(function(r) { return r.json(); })
+    .then(function(rates) {
+      renderGrid(rates);
+    });
+}
+
+function renderGrid(rates) {
+  var grid = document.getElementById('ratesGrid');
+  var html = '';
+  for (var i = 0; i < CURRENCIES.length; i++) {
+    var c = CURRENCIES[i];
+    var r = rates[c.key] || { buy: 0, sell: 0 };
+    var flagHtml = c.key === 'USDT'
+      ? '<span style="display:inline-flex;width:22px;height:22px;border-radius:50%;background:#26A17B;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">₮</span>'
+      : '<span style="font-size:18px">' + c.flag + '</span>';
+    var sellField = c.noSell
+      ? '<div class="no-sell">нет продажи</div>'
+      : '<div class="rate-field"><label>Продажа ↑</label><input class="sell" type="number" id="sell_' + c.key + '" value="' + r.sell + '"></div>';
+    html +=
+      '<div class="rate-row">' +
+        '<div class="rate-name">' +
+          '<div class="code">' + flagHtml + c.code + '</div>' +
+          '<div class="desc">' + c.name + '</div>' +
+        '</div>' +
+        '<div class="rate-field"><label>Покупка ↓</label><input class="buy" type="number" id="buy_' + c.key + '" value="' + r.buy + '"></div>' +
+        sellField +
+      '</div>';
+  }
+  grid.innerHTML = html;
+}
+
+function saveRates() {
+  var rates = {};
+  for (var i = 0; i < CURRENCIES.length; i++) {
+    var c = CURRENCIES[i];
+    var buyEl = document.getElementById('buy_' + c.key);
+    var sellEl = document.getElementById('sell_' + c.key);
+    rates[c.key] = {
+      buy:  buyEl  ? parseFloat(buyEl.value)  || 0 : 0,
+      sell: sellEl ? parseFloat(sellEl.value) || 0 : 0
+    };
+  }
+
+  var btn = document.getElementById('saveBtn');
+  var status = document.getElementById('saveStatus');
+  btn.disabled = true;
+  btn.textContent = 'СОХРАНЯЕМ...';
+  status.textContent = '';
+  status.className = 'save-status';
+
+  fetch('/api/rates', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: savedPassword, rates: rates })
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      btn.disabled = false;
+      btn.textContent = 'СОХРАНИТЬ';
+      if (res.ok) {
+        status.textContent = '✓ Курсы обновлены';
+        status.className = 'save-status ok';
+        var d = new Date(res.updatedAt);
+        document.getElementById('updatedAt').textContent =
+          'Обновлено: ' + d.toLocaleString('ru-RU');
+      } else {
+        status.textContent = '✗ ' + (res.error || 'Ошибка');
+        status.className = 'save-status fail';
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = 'СОХРАНИТЬ';
+      status.textContent = '✗ Ошибка соединения';
+      status.className = 'save-status fail';
+    });
+}
+
+// Auto-login if password saved
+(function() {
+  var pw = localStorage.getItem('ge_pw');
+  if (pw) {
+    savedPassword = pw;
+    showAdmin();
+  }
+})();
+</script>
+</body>
+</html>
