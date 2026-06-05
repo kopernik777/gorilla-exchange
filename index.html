@@ -864,10 +864,37 @@ function setDT(){
 var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
 
-try{buildTicker();}catch(e){console.log('ticker err',e);}
-// rates page removed
 try{setDT();}catch(e){}
 try{syncF('from');syncF('to');}catch(e){}
+
+// ── ЗАГРУЗКА КУРСОВ С API ──────────────────────
+(function(){
+  function applyRates(data){
+    var keys=['USD','RUB_T','RUB','USDT','KZT_T','KZT','EUR','CNY','THB','JPY','KRW'];
+    for(var i=0;i<keys.length;i++){
+      var k=keys[i];
+      if(data[k]){
+        RATES[k]=data[k];
+        CR[k]=data[k];
+      }
+    }
+    // обновить RT для совместимости
+    for(var j=0;j<RT.length;j++){
+      var c=RT[j];
+      var rk=c.code==='РУБ'?'RUB_T':c.code==='BKZT'?'KZT_T':c.code;
+      if(RATES[rk]){c.buy=RATES[rk].buy;c.sell=RATES[rk].sell;}
+    }
+    try{buildTicker();}catch(e){}
+    try{calcAll();}catch(e){}
+  }
+
+  try{buildTicker();}catch(e){console.log('ticker err',e);}
+
+  fetch('/api/rates')
+    .then(function(r){return r.json();})
+    .then(function(data){applyRates(data);})
+    .catch(function(){/* используем хардкод-значения */});
+})();
 
 // ── THEME ──────────────────────────────────────
 function toggleTheme(){

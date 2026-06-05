@@ -1,0 +1,13 @@
+{
+  "USD":   { "buy": 25500, "sell": 26500 },
+  "RUB_T": { "buy": 319,   "sell": 365   },
+  "RUB":   { "buy": 295,   "sell": 310   },
+  "USDT":  { "buy": 25500, "sell": 26600 },
+  "KZT_T": { "buy": 50,    "sell": 0     },
+  "KZT":   { "buy": 50,    "sell": 59    },
+  "EUR":   { "buy": 30000, "sell": 30500 },
+  "CNY":   { "buy": 3800,  "sell": 3950  },
+  "THB":   { "buy": 700,   "sell": 730   },
+  "JPY":   { "buy": 160,   "sell": 175   },
+  "KRW":   { "buy": 17,    "sell": 19    }
+}
