@@ -369,9 +369,9 @@ body.light .footer { background: #f3f4f6 }
 .chart-tabs{display:flex;gap:4px}
 .ctab{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:600;background:none;border:1px solid var(--bd);color:var(--t2);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
 .ctab.active{background:var(--g1);border-color:rgba(74,222,128,0.3);color:var(--g3)}
-.chart-canvas-wrap{position:relative;height:100px}
-canvas#rateChart{width:100%;height:100%}
-.chart-empty{text-align:center;color:var(--mut);font-size:12px;padding:20px 0}
+.chart-canvas-wrap{position:relative}
+canvas#rateChart{width:100%;height:100px;display:block}
+.chart-empty{text-align:center;color:var(--mut);font-size:12px;padding:16px 0}
 
 /* ── SHARE BUTTON ────────────────────────────── */
 .btn-share{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg3);border:1px solid var(--bd);border-radius:8px;color:var(--t2);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;width:100%;margin-top:10px}
@@ -578,7 +578,7 @@ canvas#rateChart{width:100%;height:100%}
     </div>
 
     <!-- CHART -->
-    <div class="chart-block reveal" id="chartBlock">
+    <div class="chart-block reveal" id="chartBlock" style="display:none">
       <div class="chart-header">
         <div class="chart-title">📈 ИСТОРИЯ КУРСА</div>
         <div class="chart-tabs">
@@ -1401,7 +1401,11 @@ function loadHistory(){
     .then(function(r){ return r.json(); })
     .then(function(data){
       chartHistory = data;
-      drawChart();
+      var block = document.getElementById('chartBlock');
+      if(data && data.length >= 2 && block){
+        block.style.display = 'block';
+        drawChart();
+      }
     })
     .catch(function(){});
 }
