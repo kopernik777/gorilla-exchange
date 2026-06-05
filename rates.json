@@ -1,6 +1,6 @@
 {
   "USD":   { "buy": 25500, "sell": 26500, "min": 50  },
-  "RUB_T": { "buy": 319,   "sell": 365,   "min": 5000 },
+  "RUB_T": { "buy": 327,   "sell": 365,   "min": 5000 },
   "RUB":   { "buy": 295,   "sell": 310,   "min": 5000 },
   "USDT":  { "buy": 25500, "sell": 26600, "min": 50  },
   "KZT_T": { "buy": 50,    "sell": 0,     "min": 50000 },
