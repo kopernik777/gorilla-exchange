@@ -445,12 +445,9 @@ canvas#rateChart{width:100%;height:100%}
         <option value="Ханой">📍 Ханой</option>
         <option value="Фукуок">📍 Фукуок</option>
         <option value="Дананг">📍 Дананг</option>
+        <option value="Далат">📍 Далат</option>
         <option value="Другой">📍 Другой</option>
       </select>
-    </div>
-    <div class="modal-field">
-      <label>Имя (необязательно)</label>
-      <input type="text" id="orderName" placeholder="Как к вам обращаться?">
     </div>
     <button class="btn-order" onclick="submitOrder()">НАПИСАТЬ МЕНЕДЖЕРУ →</button>
   </div>
@@ -769,32 +766,32 @@ canvas#rateChart{width:100%;height:100%}
         <a class="city-card" href="https://t.me/gorilla_manager2?text=Привет%2C%20хочу%20обменять%20в%20Нячанге" target="_blank">
           <div class="city-flag">🏖️</div>
           <div class="city-name">Нячанг</div>
-          <div class="city-time">Курьер ~30 мин</div>
+          <div class="city-time">🛵 Курьер ~30 мин</div>
         </a>
         <a class="city-card" href="https://t.me/gorilla_manager2?text=Привет%2C%20хочу%20обменять%20в%20Хошимине" target="_blank">
           <div class="city-flag">🌆</div>
           <div class="city-name">Хошимин</div>
-          <div class="city-time">Курьер ~30 мин</div>
+          <div class="city-time">🏧 Выдача через ATM</div>
         </a>
         <a class="city-card" href="https://t.me/gorilla_manager2?text=Привет%2C%20хочу%20обменять%20в%20Ханое" target="_blank">
           <div class="city-flag">🏛️</div>
           <div class="city-name">Ханой</div>
-          <div class="city-time">Курьер ~30 мин</div>
+          <div class="city-time">🏧 Выдача через ATM</div>
         </a>
         <a class="city-card" href="https://t.me/gorilla_manager2?text=Привет%2C%20хочу%20обменять%20на%20Фукуоке" target="_blank">
           <div class="city-flag">🌴</div>
           <div class="city-name">Фукуок</div>
-          <div class="city-time">Курьер ~30 мин</div>
+          <div class="city-time">🏧 Выдача через ATM</div>
         </a>
         <a class="city-card" href="https://t.me/gorilla_manager2?text=Привет%2C%20хочу%20обменять%20в%20Дананге" target="_blank">
           <div class="city-flag">🏝️</div>
           <div class="city-name">Дананг</div>
-          <div class="city-time">Курьер ~30 мин</div>
+          <div class="city-time">🏧 Выдача через ATM</div>
         </a>
         <a class="city-card" href="https://t.me/gorilla_manager2?text=Привет%2C%20хочу%20обменять%20в%20Далате" target="_blank">
           <div class="city-flag">🌿</div>
           <div class="city-name">Далат</div>
-          <div class="city-time">Курьер ~30 мин</div>
+          <div class="city-time">🏧 Выдача через ATM</div>
         </a>
       </div>
     </div>
@@ -1190,22 +1187,18 @@ function closeOrderModal(e){
 function submitOrder(){
   haptic('medium');
   var city  = document.getElementById('orderCity').value;
-  var name  = document.getElementById('orderName').value.trim();
-  var from  = document.getElementById('fromCur').value;
-  var to    = document.getElementById('toCur').value;
   var amt   = document.getElementById('calcDisplay').value;
   var res   = document.getElementById('toResult').value;
   var fromL = document.getElementById('fromCode').textContent;
   var toL   = document.getElementById('toCode').textContent;
+  var delivery = city === 'Нячанг' ? 'Курьер ~30 мин' : 'Выдача через ATM';
 
-  // сохраняем город
   try{
     if(tg && tg.CloudStorage) tg.CloudStorage.setItem('order_city',city);
     else localStorage.setItem('order_city',city);
   }catch(e){}
 
-  var msg = 'Хочу обменять:\n'+amt+' '+fromL+' → '+res+' '+toL+'\nГород: '+city;
-  if(name) msg += '\nИмя: '+name;
+  var msg = 'Хочу обменять:\n'+amt+' '+fromL+' → '+res+' '+toL+'\nГород: '+city+'\n'+delivery;
   var url = 'https://t.me/gorilla_manager2?text='+encodeURIComponent(msg);
   window.open(url,'_blank');
   document.getElementById('orderModal').classList.remove('open');
@@ -1220,9 +1213,30 @@ function shareResult(){
   var fromL= document.getElementById('fromCode').textContent;
   var toL  = document.getElementById('toCode').textContent;
   var text = amt+' '+fromL+' = '+res+' '+toL+' | Gorilla Exchange 🦍';
-  if(tg && tg.switchInlineQuery){ tg.switchInlineQuery(text,['users','chats']); }
-  else if(navigator.share){ navigator.share({text:text,title:'Gorilla Exchange'}); }
-  else if(navigator.clipboard){ navigator.clipboard.writeText(text); hapticNotif('success'); }
+  var btn  = document.getElementById('btnShare');
+
+  function showCopied(){
+    if(btn){ var old=btn.innerHTML; btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Скопировано!'; setTimeout(function(){btn.innerHTML=old;},2000); }
+    hapticNotif('success');
+  }
+
+  if(navigator.share){
+    navigator.share({text:text,title:'Gorilla Exchange'}).catch(function(){});
+  } else {
+    try{
+      navigator.clipboard.writeText(text).then(showCopied).catch(function(){
+        var ta=document.createElement('textarea');
+        ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta); showCopied();
+      });
+    }catch(e){
+      var ta=document.createElement('textarea');
+      ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); showCopied();
+    }
+  }
 }
 
 // показывать кнопки после расчёта
