@@ -444,6 +444,92 @@ canvas#rateChart{width:100%;height:100px;display:block}
 }
 .theme-btn:hover { background: var(--g1); border-color: var(--g1); transform: rotate(20deg) }
 
+/* ── SMOOTH INTERACTIONS ──────────────────────── */
+
+/* Нажатие кнопок — сжатие */
+.btn-primary:active,.btn-save:active,.btn-order:active,.btn-send-order:active,
+.btn-ch:active,.btn-share:active,.btn-alert-set:active,.copy-btn:active,
+.btn-manager:active,.btn-reviews:active,.btn-all-reviews:active,
+.btn-order:active,.swap-btn:active,.cur-pill:active{
+  transform:scale(0.95)!important;
+  transition:transform 0.08s ease!important;
+}
+.ntab:active{transform:scale(0.94)!important;transition:transform 0.08s!important}
+.city-card:active{transform:scale(0.97)!important;transition:transform 0.08s!important}
+.rrow:active{background:rgba(74,222,128,0.07)!important}
+.cbtn:active{transform:scale(0.98)!important;transition:transform 0.08s!important}
+.copy-ico:active{transform:scale(0.88)!important;transition:transform 0.08s!important}
+
+/* Переключение страниц — плавнее */
+@keyframes pageFade{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.page-sec.active{animation:pageFade .32s cubic-bezier(.22,.68,0,1.2)}
+
+/* Нижнее меню — прыжок иконки */
+@keyframes tabBounce{
+  0%{transform:scale(1) translateY(0)}
+  45%{transform:scale(1.28) translateY(-4px)}
+  70%{transform:scale(0.95) translateY(0)}
+  100%{transform:scale(1) translateY(0)}
+}
+.mtb{transition:color .2s}
+.mtb.active svg{animation:tabBounce .38s cubic-bezier(.36,.07,.19,.97)}
+
+/* Мобильный таб — тап */
+.mtb:active{opacity:.65;transition:opacity 0.05s}
+
+/* Инпут фокус — свечение */
+.cv-field:focus-within{
+  border-color:rgba(74,222,128,0.45)!important;
+  box-shadow:0 0 0 3px rgba(74,222,128,0.07);
+  transition:border-color .2s,box-shadow .2s;
+}
+.modal-field input:focus,.modal-field select:focus,
+.alert-selects select:focus,.alert-selects input:focus{
+  box-shadow:0 0 0 3px rgba(74,222,128,0.07)!important;
+}
+
+/* Карточки — появление с задержкой при смене страницы */
+.page-sec.active .reveal:nth-child(1){transition-delay:.04s}
+.page-sec.active .reveal:nth-child(2){transition-delay:.09s}
+.page-sec.active .reveal:nth-child(3){transition-delay:.14s}
+.page-sec.active .reveal:nth-child(4){transition-delay:.19s}
+.page-sec.active .reveal:nth-child(5){transition-delay:.23s}
+
+/* Swap кнопка — плавный поворот */
+.swap-btn{transition:all .35s cubic-bezier(.68,-.55,.27,1.55)!important}
+.swap-btn:hover{transform:rotate(180deg)!important}
+
+/* Зелёная кнопка — пульс при нажатии */
+@keyframes btnPulse{
+  0%{box-shadow:0 0 0 0 rgba(74,222,128,0.45)}
+  70%{box-shadow:0 0 0 10px rgba(74,222,128,0)}
+  100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}
+}
+.btn-send-order:not(:active):focus{animation:btnPulse .6s ease}
+.btn-order:not(:active):focus{animation:btnPulse .6s ease}
+
+/* Строка курса — плавный переход */
+.rrow{transition:background .12s ease}
+
+/* Карточки ховер — плавнее */
+.info-card,.acard,.how-step,.city-card,.review-card{
+  transition:border-color .22s,box-shadow .22s,transform .22s!important;
+}
+
+/* Скелетон загрузки */
+@keyframes shimmer{
+  0%{background-position:-200% 0}
+  100%{background-position:200% 0}
+}
+.loading-shimmer{
+  background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s infinite;
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -1063,11 +1149,23 @@ function showPage(name){
   var order=['calc','about'];
   var idx=order.indexOf(name);
   document.querySelectorAll('.ntab').forEach(function(t,i){t.classList.toggle('active',i===idx);});
-  // sync mobile tabs
+  // sync mobile tabs — перезапуск анимации иконки
   var mobMap={calc:'mob-c',about:'mob-a'};
-  setMA(mobMap[name]||'');
+  var activeId=mobMap[name]||'';
+  setMA(activeId);
+  // перезапустить анимацию bounce
+  var activeBtn=document.getElementById(activeId);
+  if(activeBtn){
+    var svg=activeBtn.querySelector('svg');
+    if(svg){svg.style.animation='none';svg.offsetWidth;svg.style.animation='';}
+  }
   window.scrollTo({top:0,behavior:'smooth'});
-  setTimeout(function(){pg.querySelectorAll('.reveal').forEach(function(el){el.classList.add('visible');});},60);
+  // reveal с небольшой задержкой для плавности
+  setTimeout(function(){
+    pg.querySelectorAll('.reveal').forEach(function(el,i){
+      setTimeout(function(){el.classList.add('visible');},i*40);
+    });
+  },50);
 }
 
 
