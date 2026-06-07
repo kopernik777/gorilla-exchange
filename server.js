@@ -5,13 +5,23 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'gorilla2024';
-const RATES_FILE = path.join(__dirname, 'rates.json');
-const HISTORY_FILE = path.join(__dirname, 'history.json');
+
+// Если есть Railway Volume (/data) — используем его, иначе папку проекта
+const DATA_DIR = fs.existsSync('/data') ? '/data' : __dirname;
+const RATES_FILE = path.join(DATA_DIR, 'rates.json');
+const HISTORY_FILE = path.join(DATA_DIR, 'history.json');
+
+// При первом запуске с Volume — копируем rates.json из проекта
+const BUNDLED_RATES = path.join(__dirname, 'rates.json');
+if (DATA_DIR !== __dirname && !fs.existsSync(RATES_FILE) && fs.existsSync(BUNDLED_RATES)) {
+  fs.copyFileSync(BUNDLED_RATES, RATES_FILE);
+  console.log('Rates initialized from bundled file');
+}
 
 app.use(express.json());
 app.use(express.static(__dirname));
 
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.get('/health', (req, res) => res.json({ status: 'ok', dataDir: DATA_DIR }));
 
 app.get('/api/rates', (req, res) => {
   try {
@@ -63,5 +73,6 @@ function saveHistory(rates) {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Gorilla Exchange запущен на порту ${PORT}`);
-  console.log(`Listening on 0.0.0.0:${PORT}`);
+  console.log(`Данные хранятся в: ${DATA_DIR}`);
 });
+
