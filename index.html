@@ -88,8 +88,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(14,17,21,0.97);backdrop-fi
 .ticker-outer::before{left:68px;background:linear-gradient(to right,var(--bg3),transparent)}
 .ticker-outer::after{right:0;background:linear-gradient(to left,var(--bg3),transparent)}
 .ticker-lbl{background:var(--g2);color:#000;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;padding:0 13px;height:100%;display:flex;align-items:center;flex-shrink:0;z-index:3;position:relative}
-.ticker-track{display:flex;gap:26px;animation:tickAnim 32s linear infinite;width:max-content;padding:0 16px;align-items:center;will-change:transform}
-.ticker-track:hover{animation-play-state:paused}
+.ticker-track{display:flex;gap:26px;animation:tickAnim 36s linear infinite;width:max-content;padding:0 16px;align-items:center}
 @keyframes tickAnim{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .ti{display:flex;align-items:center;gap:5px;font-size:11px;white-space:nowrap}
 .ti-flag{font-size:13px;line-height:1}
@@ -664,12 +663,7 @@ body.light .hero-pill{background:rgba(22,163,74,0.08);border-color:rgba(22,163,7
   <div class="hero-inner">
     <div>
       <div class="hero-h1">&#1054;&#1073;&#1084;&#1077;&#1085; &#1074;&#1072;&#1083;&#1102;&#1090; <span>&#1074;&#1086; &#1042;&#1100;&#1077;&#1090;&#1085;&#1072;&#1084;&#1077;</span></div>
-      <div class="hero-pills">
-        <span class="hero-pill">✓ Лучший курс</span>
-        <span class="hero-pill">✓ Без предоплаты</span>
-        <span class="hero-pill">✓ Без скрытых комиссий</span>
-        <span class="hero-pill">✓ 24/7</span>
-      </div>
+
       <div class="hero-date"><span class="ldot"></span><span id="heroTime">Курсы обновлены</span>&nbsp;·&nbsp;<span id="heroDate"></span></div>
     </div>
     <div class="hero-stats">
@@ -1255,6 +1249,10 @@ function buildTicker(){
     '</div>';
   }
   el.innerHTML=h+h;
+  // Перезапуск анимации после вставки контента
+  el.style.animation='none';
+  void el.offsetWidth;
+  el.style.animation='';
 }
 
 
