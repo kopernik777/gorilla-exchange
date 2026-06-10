@@ -19,7 +19,15 @@ if (DATA_DIR !== __dirname && !fs.existsSync(RATES_FILE) && fs.existsSync(BUNDLE
 }
 
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use((req, res, next) => {
+  if (!req.path.match(/\.(js|css|png|jpg|ico|woff2?)$/)) {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+  }
+  next();
+});
+app.use(express.static(__dirname, { etag: false, lastModified: false }));
 
 app.get('/health', (req, res) => res.json({ status: 'ok', dataDir: DATA_DIR }));
 
