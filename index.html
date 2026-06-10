@@ -67,9 +67,9 @@ nav{position:sticky;top:0;z-index:200;background:rgba(14,17,21,0.97);backdrop-fi
 .btn-ch:hover{box-shadow:0 0 24px rgba(74,222,128,0.40);transform:translateY(-1px)}
 
 /* ── HERO BAND ────────────────────────────────── */
-.hero-band{background:var(--bg2);border-bottom:1px solid var(--bd);padding:14px 20px;position:relative;z-index:1}
+.hero-band{background:var(--bg2);border-bottom:1px solid var(--bd);padding:22px 20px;position:relative;z-index:1}
 .hero-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.hero-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(17px,3vw,28px);letter-spacing:1.5px;line-height:1.2;color:var(--wh)}
+.hero-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,3.5vw,34px);letter-spacing:1.5px;line-height:1.2;color:var(--wh)}
 .hero-h1 span{color:var(--g3)}
 .hero-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mut);margin-top:3px;display:flex;align-items:center;gap:6px}
 .ldot{width:6px;height:6px;background:var(--g3);border-radius:50%;animation:ldot 1.6s ease-in-out infinite;flex-shrink:0}
@@ -288,7 +288,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(14,17,21,0.97);backdrop-fi
   .nav-tabs{display:none}
   .mob-tabs{display:block}
   .page{padding:14px 12px 80px}
-  .hero-band{padding:11px 12px}
+  .hero-band{padding:16px 12px}
   .rth,.rrow{grid-template-columns:1fr 82px 82px;padding:10px 12px}
   .rr-buy,.rr-sell{font-size:13px}
   .rr-code{font-size:15px}
@@ -299,6 +299,11 @@ nav{position:sticky;top:0;z-index:200;background:rgba(14,17,21,0.97);backdrop-fi
   .cv-swap{padding:4px 0;flex-direction:row}
   .nav-wrap{padding:8px 12px}
   .how-steps{grid-template-columns:1fr}
+  /* мобильная кнопка — короткий текст через псевдоэлемент */
+  #btnSendOrder{font-size:15px!important;letter-spacing:1.5px!important;padding:14px!important}
+  .hero-pills{gap:5px}
+  .hero-pill{font-size:10px;padding:3px 8px}
+  .trust-mini-item{padding:10px 12px}
 }
 @media(max-width:420px){
   .rth,.rrow{grid-template-columns:1fr 72px 72px;padding:9px 10px}
@@ -539,6 +544,31 @@ canvas#rateChart{width:100%;height:100px;display:block}
   animation:shimmer 1.4s infinite;
 }
 
+/* ── HERO PILLS ──────────────────────────────── */
+.hero-pills{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 6px}
+.hero-pill{display:inline-flex;align-items:center;font-size:11px;color:var(--g3);background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.20);border-radius:20px;padding:3px 10px;font-weight:600;white-space:nowrap;letter-spacing:.3px}
+body.light .hero-pill{background:rgba(22,163,74,0.08);border-color:rgba(22,163,74,0.22)}
+
+/* ── TRUST MINI ──────────────────────────────── */
+.trust-mini{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.trust-mini-item{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:11px 14px;display:flex;gap:10px;align-items:flex-start}
+.tmi-avatar{width:32px;height:32px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.tmi-body{flex:1;min-width:0}
+.tmi-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.tmi-name{font-size:12px;font-weight:600;color:var(--wh)}
+.tmi-stars{color:var(--gold);font-size:11px;letter-spacing:1px;flex-shrink:0}
+.tmi-text{font-size:12px;color:var(--t2);line-height:1.55}
+.tmi-more{text-align:center;padding:6px 0 2px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--mut)}
+.tmi-more a{color:var(--g3);text-decoration:none}
+.tmi-more a:hover{text-decoration:underline}
+
+/* ── BTN SEND ORDER — bigger ─────────────────── */
+.btn-send-order{padding:15px!important;font-size:17px!important;letter-spacing:2.5px!important;box-shadow:0 4px 22px rgba(74,222,128,0.35)!important}
+.btn-send-order.visible:hover{box-shadow:0 0 36px rgba(74,222,128,0.55)!important;transform:translateY(-2px)}
+
+/* ── SECTION TITLE — reduce heavy pill ──────── */
+.sec-title{font-size:20px!important}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -607,8 +637,14 @@ canvas#rateChart{width:100%;height:100px;display:block}
 <div class="hero-band">
   <div class="hero-inner">
     <div>
-      <div class="hero-h1">&#1050;&#1091;&#1088;&#1089;&#1099; &#1074;&#1072;&#1083;&#1102;&#1090; <span>&#1089;&#1077;&#1075;&#1086;&#1076;&#1085;&#1103;</span> &mdash; <span id="heroDate"></span></div>
-      <div class="hero-date"><span class="ldot"></span><span id="heroTime">&#1054;&#1073;&#1085;&#1086;&#1074;&#1083;&#1077;&#1085;&#1086; &#1090;&#1086;&#1083;&#1100;&#1082;&#1086; &#1095;&#1090;&#1086;</span></div>
+      <div class="hero-h1">Курьер с деньгами <span>за 30 минут</span> — по всему Вьетнаму</div>
+      <div class="hero-pills">
+        <span class="hero-pill">✓ Лучший курс</span>
+        <span class="hero-pill">✓ Без предоплаты</span>
+        <span class="hero-pill">✓ Без скрытых комиссий</span>
+        <span class="hero-pill">✓ 24/7</span>
+      </div>
+      <div class="hero-date"><span class="ldot"></span><span id="heroTime">Курсы обновлены</span>&nbsp;·&nbsp;<span id="heroDate"></span></div>
     </div>
     <div class="hero-stats">
       <div><div class="hs-v">500+</div><div class="hs-l">&#1054;&#1090;&#1079;&#1099;&#1074;&#1086;&#1074;</div></div>
@@ -633,9 +669,9 @@ canvas#rateChart{width:100%;height:100px;display:block}
   <div class="page-sec active" id="page-calc">
     <div class="calc-title">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--g3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="14" y1="18" x2="16" y2="18"/></svg>
-      <span class="hi">&#1050;&#1040;&#1051;&#1068;&#1050;&#1059;&#1051;&#1071;&#1058;&#1054;&#1056;</span> &#1054;&#1041;&#1052;&#1045;&#1053;&#1040;
+      <span class="hi">РАССЧИТАЙ</span> И ОБМЕНЯЙ
     </div>
-    <div class="calc-sub">&#1042;&#1099;&#1073;&#1077;&#1088;&#1080;&#1090;&#1077; &#1074;&#1072;&#1083;&#1102;&#1090;&#1091;, &#1074;&#1074;&#1077;&#1076;&#1080;&#1090;&#1077; &#1089;&#1091;&#1084;&#1084;&#1091; &mdash; &#1082;&#1086;&#1085;&#1074;&#1077;&#1088;&#1090;&#1072;&#1094;&#1080;&#1103; &#1074;&#1086; &#1074;&#1089;&#1077; &#1074;&#1072;&#1083;&#1102;&#1090;&#1099; &#1089;&#1088;&#1072;&#1079;&#1091;</div>
+    <div class="calc-sub">Введи сумму&nbsp;→ узнай точный курс&nbsp;→ курьер привезёт деньги за 30 минут. Без предоплаты.</div>
 
     <div class="bonus-banner">
       <div class="bonus-icon">🎁</div>
@@ -703,11 +739,36 @@ canvas#rateChart{width:100%;height:100px;display:block}
         </div>
       </div>
       <div id="allResults"></div>
-      <button class="btn-send-order" id="btnSendOrder" onclick="openOrderModal()">📲 ОБМЕНЯТЬ</button>
+      <button class="btn-send-order" id="btnSendOrder" onclick="openOrderModal()">🚀 ОБМЕНЯТЬ СЕЙЧАС — БЕСПЛАТНАЯ ДОСТАВКА</button>
       <button class="btn-share" id="btnShare" style="display:none" onclick="shareResult()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Поделиться результатом
       </button>
+    </div>
+
+    <!-- TRUST MINI — social proof на главном экране -->
+    <div class="trust-mini reveal">
+      <div class="trust-mini-item">
+        <div class="tmi-avatar">😊</div>
+        <div class="tmi-body">
+          <div class="tmi-head">
+            <div class="tmi-name">Анна К. <span style="color:var(--mut);font-weight:400">· Нячанг</span></div>
+            <div class="tmi-stars">★★★★★</div>
+          </div>
+          <div class="tmi-text">Курьер за 20 минут, курс лучше любого обменника на улице. Без предоплаты — всё честно!</div>
+        </div>
+      </div>
+      <div class="trust-mini-item">
+        <div class="tmi-avatar">😎</div>
+        <div class="tmi-body">
+          <div class="tmi-head">
+            <div class="tmi-name">Дмитрий В. <span style="color:var(--mut);font-weight:400">· Хошимин</span></div>
+            <div class="tmi-stars">★★★★★</div>
+          </div>
+          <div class="tmi-text">Рубли → донги за 15 минут. Менеджер 24/7, отвечает мгновенно. Рекомендую!</div>
+        </div>
+      </div>
+      <div class="tmi-more"><a href="https://t.me/gorilla_exchange_reviews" target="_blank">⭐ Ещё 498+ отзывов в Telegram →</a></div>
     </div>
 
     <!-- CHART -->
@@ -757,9 +818,9 @@ canvas#rateChart{width:100%;height:100px;display:block}
             <span class="cbtn-arrow">&#8594;</span>
           </a>
           <a class="btn-manager" href="https://t.me/gorilla_manager2" target="_blank">
-
-            <div><div class="bm-label">&#1053;&#1072;&#1087;&#1080;&#1089;&#1072;&#1090;&#1100; &#1084;&#1077;&#1085;&#1077;&#1076;&#1078;&#1077;&#1088;&#1091;</div><div class="bm-sub">&#1041;&#1099;&#1089;&#1090;&#1088;&#1099;&#1081; &#1086;&#1090;&#1074;&#1077;&#1090; &middot; 24/7</div></div>
-            <div class="bm-arrow">&#8594;</div>
+            <div class="bm-icon">🦍</div>
+            <div><div class="bm-label">Написать менеджеру</div><div class="bm-sub">Быстрый ответ · 24/7</div></div>
+            <div class="bm-arrow">→</div>
           </a>
         </div>
       </div>
@@ -768,7 +829,7 @@ canvas#rateChart{width:100%;height:100px;display:block}
     <div class="how-wrap reveal">
       <div class="how-title">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        КАК ПРОИСХОДИТ ОБМЕН
+        КАК ПОЛУЧИТЬ ДЕНЬГИ — 4 ПРОСТЫХ ШАГА
       </div>
       <div class="how-steps">
 
@@ -965,9 +1026,9 @@ canvas#rateChart{width:100%;height:100px;display:block}
             &#1063;&#1090;&#1086;&#1073;&#1099; &#1091;&#1079;&#1085;&#1072;&#1090;&#1100; &#1091;&#1089;&#1083;&#1086;&#1074;&#1080;&#1103; &#1080; &#1087;&#1086;&#1076;&#1082;&#1083;&#1102;&#1095;&#1080;&#1090;&#1100;&#1089;&#1103; &mdash; <strong>&#1089;&#1074;&#1103;&#1078;&#1080;&#1090;&#1077;&#1089;&#1100; &#1089; &#1084;&#1077;&#1085;&#1077;&#1076;&#1078;&#1077;&#1088;&#1086;&#1084;</strong>.
           </div>
           <a class="btn-manager" href="https://t.me/gorilla_manager2" target="_blank">
-
-            <div><div class="bm-label">&#1053;&#1072;&#1087;&#1080;&#1089;&#1072;&#1090;&#1100; &#1084;&#1077;&#1085;&#1077;&#1076;&#1078;&#1077;&#1088;&#1091;</div><div class="bm-sub">&#1059;&#1079;&#1085;&#1072;&#1090;&#1100; &#1091;&#1089;&#1083;&#1086;&#1074;&#1080;&#1103; &#1088;&#1077;&#1092;&#1077;&#1088;&#1072;&#1083;&#1100;&#1085;&#1086;&#1081; &#1087;&#1088;&#1086;&#1075;&#1088;&#1072;&#1084;&#1084;&#1099;</div></div>
-            <div class="bm-arrow">&#8594;</div>
+            <div class="bm-icon">🦍</div>
+            <div><div class="bm-label">Написать менеджеру</div><div class="bm-sub">Узнать условия реферальной программы</div></div>
+            <div class="bm-arrow">→</div>
           </a>
         </div>
   </div>
@@ -979,7 +1040,7 @@ canvas#rateChart{width:100%;height:100px;display:block}
 <div class="footer">
   <div class="footer-inner">
     <div class="footer-logo">
-      <div><div class="fl-t">Gorilla Exchange</div><div class="fl-s">&#1042;&#1100;&#1077;&#1090;&#1085;&#1072;&#1084; &middot; 2024</div></div>
+      <div><div class="fl-t">Gorilla Exchange</div><div class="fl-s">&#1042;&#1100;&#1077;&#1090;&#1085;&#1072;&#1084; &middot; 2025</div></div>
     </div>
     <div class="footer-links">
       <a href="https://t.me/exchange_gorilla" target="_blank">&#128226; &#1050;&#1072;&#1085;&#1072;&#1083;</a>
@@ -987,7 +1048,7 @@ canvas#rateChart{width:100%;height:100px;display:block}
       <a href="https://t.me/gorilla_exchange_reviews" target="_blank">&#11088; &#1054;&#1090;&#1079;&#1099;&#1074;&#1099;</a>
       <a href="#" onclick="showPage('about');return false">&#1054; &#1085;&#1072;&#1089;</a>
     </div>
-    <div class="footer-copy">&copy; 2024 Gorilla Exchange &#129421;</div>
+    <div class="footer-copy">&copy; 2025 Gorilla Exchange &#129421;</div>
   </div>
 </div>
 
